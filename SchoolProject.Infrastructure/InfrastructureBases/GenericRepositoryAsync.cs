@@ -38,7 +38,12 @@ namespace SchoolProject.Infrastructure.InfrastructureBases
             return await _dbContext.Set<T>().FindAsync(id);
         }
 
- 
+
+        public IQueryable<T> GetTableNoTracking()
+        {
+            return _dbContext.Set<T>().AsNoTracking().AsQueryable();
+        }
+
 
         public virtual async Task AddRangeAsync(ICollection<T> entities)
         {
@@ -66,6 +71,14 @@ namespace SchoolProject.Infrastructure.InfrastructureBases
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
         }
+        public virtual async Task DeleteRangeAsync(ICollection<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                _dbContext.Entry(entity).State = EntityState.Deleted;
+            }
+            await _dbContext.SaveChangesAsync();
+        }
 
         public async Task SaveChangesAsync()
         {
@@ -73,16 +86,36 @@ namespace SchoolProject.Infrastructure.InfrastructureBases
         }
 
 
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _dbContext.Database.BeginTransaction();
+        }
+
+        public void Commit()
+        {
+            _dbContext.Database.CommitTransaction();
+
+        }
+
+        public void RollBack()
+        {
+            _dbContext.Database.RollbackTransaction();
+        }
+
+        public IQueryable<T> GetTableAsTracking()
+        {
+            return _dbContext.Set<T>().AsQueryable();
+
+        }
+
         public virtual async Task UpdateRangeAsync(ICollection<T> entities)
         {
             _dbContext.Set<T>().UpdateRange(entities);
             await _dbContext.SaveChangesAsync();
         }
 
-
-
-
-
+      
         #endregion
     }
 }
