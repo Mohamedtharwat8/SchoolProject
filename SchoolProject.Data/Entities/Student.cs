@@ -26,7 +26,6 @@ namespace SchoolProject.Data.Entities
         public int? DID { get; set; }
 
         [ForeignKey("DID")]
-        [InverseProperty("Students")]
         public virtual Department Department { get; set; }
 
 

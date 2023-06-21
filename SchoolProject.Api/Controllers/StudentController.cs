@@ -1,31 +1,54 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SchoolProject.Api.Base;
+using SchoolProject.Core.Features.Students.Commands.Models;
 using SchoolProject.Core.Features.Students.Queries.Models;
+using SchoolProject.Data.AppMetaData;
 
 namespace SchoolProject.Api.Controllers
 {
-    [Route("api/[controller]")]
+
     [ApiController]
-    public class StudentController : ControllerBase
+    public class StudentController : AppControllerBase
     {
+        [HttpGet(Router.StudentRouting.List)]
 
-        private readonly IMediator _mediator;
-
-        public StudentController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
-        [HttpGet("/Student/List")]
         public async Task<IActionResult> GetStudentList()
         {
-            var response = await _mediator.Send(new GetStudentListQuery());
 
-            return Ok(response);
+
+            return NewResult(await Mediator.Send(new GetStudentListQuery()));
+        }
+        [HttpGet(Router.StudentRouting.GetByID)]
+        public async Task<IActionResult> GetStudentByID([FromRoute] int id)
+        {
+
+
+            return NewResult(await Mediator.Send(new GetStudentByIDQuery(id)));
         }
 
 
+
+
+        [HttpPost(Router.StudentRouting.Create)]
+        public async Task<IActionResult> Create([FromBody] AddStudentCommand command)
+        {
+
+            return NewResult(await Mediator.Send(command));
+        }
+
+        [HttpPut(Router.StudentRouting.Edit)]
+        public async Task<IActionResult> Edit([FromBody] EditStudentCommand command)
+        {
+            var response = await Mediator.Send(command);
+            return NewResult(response);
+        }
+
+
+        [HttpDelete(Router.StudentRouting.Delete)]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            return NewResult(await Mediator.Send(new DeleteStudentCommand(id)));
+        }
 
     }
 }

@@ -9,7 +9,9 @@ namespace SchoolProject.Core.Features.Students.Queries.Handlers
 {
     public class StudentQueryHandler 
         : ResponseHandler, 
-        IRequestHandler<GetStudentListQuery, Response<List<GetStudentListResponse>>>
+        IRequestHandler<GetStudentListQuery, Response<List<GetStudentListResponse>>>,
+        IRequestHandler<GetStudentByIDQuery, Response<GetSingleStudentResponse>>
+
     {
 
         #region Fields
@@ -38,6 +40,15 @@ namespace SchoolProject.Core.Features.Students.Queries.Handlers
         }
 
 
+        public async Task<Response<GetSingleStudentResponse>> Handle(GetStudentByIDQuery request, CancellationToken cancellationToken)
+        {
+            var student = await _studentService.GetStudentByIDWithIncludeAsync(request.Id);
+            if (student == null) 
+                return NotFound<GetSingleStudentResponse>
+                    ("NotFound");
+            var result = _mapper.Map<GetSingleStudentResponse>(student);
+            return Success(result);
+        }
 
 
 
