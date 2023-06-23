@@ -1,29 +1,33 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Localization;
 using SchoolProject.Core.Bases;
 using SchoolProject.Core.Features.Students.Commands.Models;
+using SchoolProject.Core.Resources;
 using SchoolProject.Data.Entities;
 using SchoolProject.Service.Abstracts;
 
 namespace SchoolProject.Core.Features.Students.Commands.Handlers
 {
     public class StudentCommandHandler : ResponseHandler,
-                                    IRequestHandler<AddStudentCommand, Response<string>>,
-                                    IRequestHandler<EditStudentCommand, Response<string>>,
-                                       IRequestHandler<DeleteStudentCommand, Response<string>>
+                                     IRequestHandler<AddStudentCommand, Response<string>>,
+                                     IRequestHandler<EditStudentCommand, Response<string>>,
+                                     IRequestHandler<DeleteStudentCommand, Response<string>>
     {
         #region Fields
         private readonly IStudentService _studentService;
         private readonly IMapper _mapper;
+        private readonly IStringLocalizer<SharedResources> _localizer;
         #endregion
 
         #region Constructors
         public StudentCommandHandler(IStudentService studentService,
-                                     IMapper mapper) : base(
-                                         )
+                                     IMapper mapper,
+                                     IStringLocalizer<SharedResources> localizer) : base(localizer)
         {
             _studentService = studentService;
             _mapper = mapper;
+            _localizer = localizer;
         }
         #endregion
 
@@ -53,11 +57,9 @@ namespace SchoolProject.Core.Features.Students.Commands.Handlers
             var result = await _studentService.EditAsync(studentmapper);
             //return response
             //return response
-            if (result == "Success") return Success($"Edit Successfully {studentmapper}");
+            if (result == "Success") return Success((string)_localizer[SharedResourcesKeys.Updated]);
             else return BadRequest<string>();
         }
-
-
 
         public async Task<Response<string>> Handle(DeleteStudentCommand request, CancellationToken cancellationToken)
         {

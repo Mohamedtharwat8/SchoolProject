@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-using System.Net;
-using System.Text.Json;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using SchoolProject.Core.Bases;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
+using System.Text.Json;
 
 namespace SchoolProject.Core.MiddleWare
 {

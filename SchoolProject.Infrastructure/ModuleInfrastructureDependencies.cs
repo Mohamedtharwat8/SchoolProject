@@ -2,11 +2,6 @@
 using SchoolProject.Infrastructure.Abstracts;
 using SchoolProject.Infrastructure.InfrastructureBases;
 using SchoolProject.Infrastructure.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SchoolProject.Infrastructure
 {
@@ -15,7 +10,11 @@ namespace SchoolProject.Infrastructure
         public static IServiceCollection AddInfrastructureDependencies(this IServiceCollection services)
         {
             services.AddTransient<IStudentRepository, StudentRepository>();
-           return services;
+            services.AddTransient<IDepartmentRepository, DepartmentRepository>();
+            services.AddTransient<IInstructorsRepository, InstructorsRepository>();
+            services.AddTransient<ISubjectRepository, SubjectRepository>();
+            services.AddTransient(typeof(IGenericRepositoryAsync<>), typeof(GenericRepositoryAsync<>));
+            return services;
         }
     }
 }

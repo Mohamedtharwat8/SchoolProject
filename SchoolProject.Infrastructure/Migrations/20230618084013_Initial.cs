@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -31,7 +30,7 @@ namespace SchoolProject.Infrastructure.Migrations
                     SubID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SubjectName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Period = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Period = table.Column<DateTime>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
